@@ -2,8 +2,8 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using TextureSamples.Primitives;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using TextureSamples.Primitives;
 
 namespace TextureSamples;
 

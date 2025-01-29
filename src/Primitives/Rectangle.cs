@@ -5,7 +5,7 @@ namespace TextureSamples.Primitives;
 
 public class Rectangle : IPrimitive
 {
-    public int TexturesCount;
+    public int TexturesCount { get; private set; }
 
     private int _vertexBufferObject;
     private int _elementBufferObject; 
@@ -23,10 +23,10 @@ public class Rectangle : IPrimitive
     {
         _vertices =
         [
-            -x, y, z,  0.0f, 1.0f,
-            x, y, z,   1.0f, 1.0f,
+            -x,  y, z, 0.0f, 1.0f,
+             x,  y, z, 1.0f, 1.0f,
             -x, -y, z, 0.0f, 0.0f,
-            x, -y, z,  1.0f, 0.0f
+             x, -y, z, 1.0f, 0.0f
         ];
     }
 
@@ -43,6 +43,7 @@ public class Rectangle : IPrimitive
         GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
 
         _shader = new Shader("Resources/Shaders/textures.vert", "Resources/Shaders/textures.frag");
+        _shader.Use();
 
         GL.BindVertexArray(_vertexArrayObject);
 
@@ -59,12 +60,17 @@ public class Rectangle : IPrimitive
 
         _textures = Texture.LoadTexturesFromDirectory("Resources/Textures/");
         TexturesCount = _textures.Length;
+
+        _shader.SetUniform("texture0", 0);
+        _shader.SetUniform("texture1", 1);
+        _shader.SetUniform("alpha", 0.2f);
     }
 
     public virtual void Draw(int textureId = 0)
     {
-        _shader!.Use();
         _textures![textureId].Use(TextureUnit.Texture0);
+        _textures![(textureId < TexturesCount - 1) ? (++textureId) : (TexturesCount - ++textureId)].Use(TextureUnit.Texture1);
+        _shader!.Use();
 
         GL.BindVertexArray(_vertexArrayObject);
         GL.DrawElements(BeginMode.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);

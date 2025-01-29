@@ -7,7 +7,7 @@ public class Texture(int handle)
 {
     private int Handle = handle;
 
-    public void Use(TextureUnit unit)
+    public void Use(TextureUnit unit = TextureUnit.Texture0)
     {
         GL.ActiveTexture(unit);
         GL.BindTexture(TextureTarget.Texture2D, Handle);
@@ -45,7 +45,7 @@ public class Texture(int handle)
 
         for (int i = 0; i < texturePaths.Length; i++) 
         {
-            textures[i] = Texture.LoadFromFile(texturePaths[i]);
+            textures[i] = LoadFromFile(texturePaths[i]);
         }
 
         return textures;

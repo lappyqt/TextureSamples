@@ -5,14 +5,16 @@ namespace TextureSamples.Primitives;
 
 public class Triangle : IPrimitive
 {
+    public int TexturesCount { get; private set; } 
+
     private int _vertexBufferObject;
     private int _vertexArrayObject;
     
     private readonly float[] _vertices =
     [
-        0.3f, -0.3f, 0.0f,  1.0f, 0.0f,
+         0.3f, -0.3f, 0.0f, 1.0f, 0.0f,
         -0.3f, -0.3f, 0.0f, 0.0f, 0.0f,
-        0.0f, 0.3f, 0.0f,   0.5f, 1.0f
+         0.0f,  0.3f, 0.0f, 0.5f, 1.0f
     ];
 
     private Shader? _shader;
@@ -27,6 +29,7 @@ public class Triangle : IPrimitive
         GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
 
         _shader = new Shader("Resources/Shaders/textures.vert", "Resources/Shaders/textures.frag");
+        _shader.Use();
 
         GL.BindVertexArray(_vertexArrayObject);
 
@@ -39,11 +42,17 @@ public class Triangle : IPrimitive
         GL.EnableVertexAttribArray(textureCoord);
 
         _textures = Texture.LoadTexturesFromDirectory("Resources/Textures/");
+        TexturesCount = _textures.Length;
+
+        _shader.SetUniform("texture0", 0);
+        _shader.SetUniform("texture1", 1);
+        _shader.SetUniform("alpha", 0.2f);
     }
 
     public virtual void Draw(int textureId = 0)
     {
         _textures![textureId].Use(TextureUnit.Texture0);
+        _textures![(textureId < TexturesCount - 1) ? (++textureId) : (TexturesCount - ++textureId)].Use(TextureUnit.Texture1);
         _shader!.Use();
 
         GL.BindVertexArray(_vertexArrayObject);

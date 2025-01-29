@@ -73,6 +73,18 @@ public class Shader : IDisposable
         }
     }
 
+    public void SetUniform(string name, int value)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+        GL.Uniform1(location, value);
+    }
+
+    public void SetUniform(string name, float value)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+        GL.Uniform1(location, value);
+    }
+
     public int GetAttribLocation(string attribName)
     {
         return GL.GetAttribLocation(Handle, attribName);
