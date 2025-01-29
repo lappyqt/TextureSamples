@@ -5,6 +5,8 @@ namespace TextureSamples.Primitives;
 
 public class Triangle : IPrimitive
 {
+    public int? TexturesCount { get; private set; } = null;
+
     private int _vertexBufferObject;
     private int _vertexArrayObject;
     
@@ -39,6 +41,7 @@ public class Triangle : IPrimitive
         GL.EnableVertexAttribArray(textureCoord);
 
         _textures = Texture.LoadTexturesFromDirectory("Resources/Textures/");
+        TexturesCount = _textures.Length;
     }
 
     public virtual void Draw(int textureId = 0)

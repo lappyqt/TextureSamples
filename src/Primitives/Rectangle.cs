@@ -5,7 +5,7 @@ namespace TextureSamples.Primitives;
 
 public class Rectangle : IPrimitive
 {
-    public int TexturesCount;
+    public int? TexturesCount { get; private set; } = null;
 
     private int _vertexBufferObject;
     private int _elementBufferObject; 
